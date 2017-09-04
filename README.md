@@ -15,7 +15,7 @@ $ npm i -S ryuk
 
 ## Usage
 
-```js
+```
 // file template/mapping.map.ryk
 
 #coockie_value  backendname
@@ -25,7 +25,7 @@ ${vm.list.map(({name, id}) => `${name}  ${id}`).join('\n')}
 
 compile a file and assign it to a variable
 
-```
+```js
 const ryuk = require('ryuk')
 
 const list = [{name: 'red', id: 'VDC_1'}, {name: 'blue', id: 'VDC_2'}, {name: 'green', id: 'VDC_3'}]
