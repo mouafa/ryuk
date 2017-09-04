@@ -1,0 +1,3 @@
+#coockie_value  backendname
+
+${vm.list.map(({name, id}) => `${name}  ${id}`).join('\n')}

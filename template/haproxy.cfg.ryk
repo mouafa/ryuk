@@ -1,0 +1,26 @@
+
+defaults
+    # log     global
+    mode    http
+    option  httplog
+    option  dontlognull
+    timeout connect 5s
+    timeout client  50s
+    timeout server  50s
+    stats enable
+    stats auth user:password
+
+frontend entrypoint
+    bind *:5001
+    # check the presence of ${vm.COOKIE_NAME}
+    acl cookie_exist hdr_sub(cookie) -i ${vm.COOKIE_NAME} -m found
+
+    use_backend %[req.cook(${vm.COOKIE_NAME}),lower,map_dom(./mapping.map,${vm.DEFAULT_VDC})] if cookie_exist
+
+    default_backend ${vm.DEFAULT_VDC}
+
+${vm.backends.map(({name, address, cookie}) => `
+backend ${name}
+  cookie ${vm.COOKIE_NAME} insert indirect nocache
+  server RED ${address} check cookie ${cookie}
+`).join('\n')}
